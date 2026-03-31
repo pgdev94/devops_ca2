@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Feedback Registration Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Internal CSS: high-level visual theme and page backdrop */
+    :root {
+      --bg-1: #f6f4ef;
+      --bg-2: #dde8e4;
+      --ink: #102a43;
+      --highlight: #d64550;
+      --surface: #fffdf8;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(214, 69, 80, 0.16), transparent 35%),
+        radial-gradient(circle at 80% 10%, rgba(16, 42, 67, 0.12), transparent 35%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .page-shell {
+      width: min(760px, 100%);
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="form-card" aria-labelledby="formTitle">
+      <h1 id="formTitle">Student Feedback Registration Form</h1>
+      <p class="subtitle">Share your experience to help us improve learning quality.</p>
+
+      <form id="feedbackForm" novalidate>
+        <div class="grid">
+          <div class="field">
+            <label for="studentName">Student Name</label>
+            <input type="text" id="studentName" name="studentName" placeholder="Enter your full name" />
+            <small class="error" id="studentNameError"></small>
+          </div>
+
+          <div class="field">
+            <label for="email">Email ID</label>
+            <input type="email" id="email" name="email" placeholder="name@example.com" />
+            <small class="error" id="emailError"></small>
+          </div>
+
+          <div class="field">
+            <label for="mobile">Mobile Number</label>
+            <input type="text" id="mobile" name="mobile" placeholder="10-digit mobile number" maxlength="10" />
+            <small class="error" id="mobileError"></small>
+          </div>
+
+          <div class="field">
+            <label for="department">Department</label>
+            <select id="department" name="department">
+              <option value="">Select your department</option>
+              <option value="cse">Computer Science</option>
+              <option value="ece">Electronics & Communication</option>
+              <option value="mech">Mechanical</option>
+              <option value="civil">Civil</option>
+              <option value="mba">MBA</option>
+            </select>
+            <small class="error" id="departmentError"></small>
+          </div>
+        </div>
+
+        <fieldset class="field gender-block">
+          <legend>Gender</legend>
+          <div class="gender-options">
+            <label><input type="radio" name="gender" value="male" /> Male</label>
+            <label><input type="radio" name="gender" value="female" /> Female</label>
+            <label><input type="radio" name="gender" value="other" /> Other</label>
+          </div>
+          <small class="error" id="genderError"></small>
+        </fieldset>
+
+        <div class="field">
+          <label for="feedback">Feedback Comments</label>
+          <textarea id="feedback" name="feedback" rows="5" placeholder="Write at least 10 words about your learning experience..."></textarea>
+          <small class="hint">Minimum 10 words required.</small>
+          <small class="error" id="feedbackError"></small>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="submitBtn">Submit</button>
+          <button type="reset" id="resetBtn" class="secondary">Reset</button>
+        </div>
+
+        <p id="formMessage" class="message" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
