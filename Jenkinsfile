@@ -22,14 +22,22 @@ pipeline {
           } else {
             bat 'where python || where py'
 
-            def hasPython = (bat(returnStatus: true, script: 'python --version >NUL 2>&1') == 0) ||
-                            (bat(returnStatus: true, script: 'py -3 --version >NUL 2>&1') == 0)
-            if (!hasPython) {
-              error('Python 3 is not installed on this Jenkins node. Install Python 3.x and restart the Jenkins service.')
+            // Selenium dependency chain is not stable on bleeding-edge Python (e.g., 3.15).
+            String pyCmd
+            if (bat(returnStatus: true, script: 'py -3.12 --version >NUL 2>&1') == 0) {
+              pyCmd = 'py -3.12'
+            } else if (bat(returnStatus: true, script: 'py -3.11 --version >NUL 2>&1') == 0) {
+              pyCmd = 'py -3.11'
+            } else if (bat(returnStatus: true, script: 'python --version >NUL 2>&1') == 0) {
+              pyCmd = 'python'
+            } else {
+              error('Python 3.11 or 3.12 is required on this Jenkins node. Install one of these versions and restart Jenkins service.')
             }
 
-            bat 'python -m venv .venv || py -3 -m venv .venv'
+            bat "${pyCmd} --version"
+            bat "${pyCmd} -m venv .venv"
             bat '.\\.venv\\Scripts\\python -m pip install --upgrade pip'
+            bat '.\\.venv\\Scripts\\python -m pip install --upgrade setuptools wheel'
             bat '.\\.venv\\Scripts\\pip install -r requirements.txt'
           }
         }
