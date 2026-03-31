@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 from selenium import webdriver
+from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
@@ -10,10 +11,22 @@ from selenium.webdriver.support.select import Select
 @pytest.fixture
 def driver():
     options = Options()
+    options.set_capability("pageLoadStrategy", "normal")
     options.add_argument("--headless=new")
     options.add_argument("--window-size=1440,1000")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
-    web_driver = webdriver.Chrome(options=options)
+    try:
+        web_driver = webdriver.Chrome(options=options)
+    except InvalidArgumentException as exc:
+        if "pageLoadStrategy" not in str(exc):
+            raise
+        # Some older driver stacks reject this capability key; retry without it.
+        options._caps.pop("pageLoadStrategy", None)
+        web_driver = webdriver.Chrome(options=options)
+
     yield web_driver
     web_driver.quit()
 
